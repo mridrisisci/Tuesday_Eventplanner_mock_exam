@@ -4,14 +4,12 @@ import app.dto.TicketDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -21,12 +19,6 @@ public class Ticket
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(name = "user_id")
-    private Integer userId;
-
-    @Column(name = "event_id")
-    private Integer eventId;
 
     @Column(name = "purchase_date")
     private LocalDate purchseDate;
@@ -50,8 +42,6 @@ public class Ticket
 
     public Ticket(TicketDTO ticketDTO)
     {
-        this.userId = ticketDTO.getId();
-        this.eventId = ticketDTO.getEventId();
         this.purchseDate = ticketDTO.getPurchaseDate();
         this.price = ticketDTO.getPrice();
         this.seatNumber = ticketDTO.getSeatNumber();

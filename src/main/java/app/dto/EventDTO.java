@@ -1,6 +1,7 @@
 package app.dto;
 
 import app.entities.Event;
+import app.enums.EventCategory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ public class EventDTO
     private String name;
     private String location;
     private Integer price;
-    private String category;
+    private EventCategory category;
 
     public EventDTO(Event event)
     {

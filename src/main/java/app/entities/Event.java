@@ -1,17 +1,15 @@
 package app.entities;
 
 import app.dto.EventDTO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import app.enums.EventCategory;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +23,9 @@ public class Event
     private String name;
     private String location;
     private Integer price;
-    private String category;
+
+    @Enumerated(EnumType.STRING)
+    private EventCategory category;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "event", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
