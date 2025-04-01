@@ -6,30 +6,45 @@ import app.dto.ErrorMessage;
 import app.dto.HotelDTO;
 import app.entities.Hotel;
 import app.entities.Room;
+import app.utils.Populator;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class HotelController implements IController
+public class TicketController implements IController
 {
     private final CrudDAO dao;
-    private static final Logger logger = LoggerFactory.getLogger(HotelController.class);
+    private static final Logger logger = LoggerFactory.getLogger(TicketController.class);
 
 
-    public HotelController(EntityManagerFactory emf)
+    public TicketController(EntityManagerFactory emf)
     {
         dao = new HotelDAO(emf);
     }
 
-    public HotelController(CrudDAO dao)
+    public TicketController(CrudDAO dao)
     {
         this.dao = dao;
     }
 
+    public void populateDB(EntityManagerFactory emf)
+    {
+        Populator populator = new Populator();
+        try (EntityManager em = emf.createEntityManager())
+        {
+            populator.resetAndPersistEntities(em);
+            logger.info("Populated database with dummy data");
+        } catch (Exception e)
+        {
+            logger.error("Error populating database: " + e.getMessage());
+        }
+
+    }
 
 
     @Override

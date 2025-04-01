@@ -31,13 +31,13 @@ public class Ticket
     @ToString.Exclude
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ToString.Exclude
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name = "event_id", nullable = false)
+    @JoinColumn(name = "event_id")
     private Event event;
 
     public Ticket(TicketDTO ticketDTO)

@@ -1,43 +1,46 @@
 package app.routes;
 
+import app.config.HibernateConfig;
+import app.controllers.TicketController;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import app.controllers.HotelController;
 import app.controllers.SecurityController;
 import app.enums.Roles;
 import io.javalin.apibuilder.EndpointGroup;
+import jakarta.persistence.EntityManagerFactory;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Routes
 {
-    private final HotelController hotelController;
+    private final TicketController ticketController;
     private final SecurityController securityController;
     private final ObjectMapper jsonMapper = new ObjectMapper();
+    private final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
-    public Routes(HotelController hotelController, SecurityController securityController)
+    public Routes(TicketController ticketController, SecurityController securityController)
     {
-        this.hotelController = hotelController;
+        this.ticketController = ticketController;
         this.securityController = securityController;
     }
 
-    public  EndpointGroup getRoutes()
+    public EndpointGroup getRoutes()
     {
         return () -> {
-            path("hotel", hotelRoutes());
+            path("ticket", ticketRoutes());
             path("auth", authRoutes());
             path("protected", protectedRoutes());
         };
     }
 
-    private  EndpointGroup hotelRoutes()
+    private  EndpointGroup ticketRoutes()
     {
         return () -> {
-            get(hotelController::getAll);
-            post(hotelController::create);
-            get("/{id}", hotelController::getById);
-            put("/{id}", hotelController::upappe);
-            delete("/{id}", hotelController::delete);
-            get("/{id}/rooms", hotelController::getRooms);
+            get("/all", ticketController::getAll);
+            post("/create", ticketController::create);
+            get("/{id}", ticketController::getById);
+            put("/{id}", ticketController::update);
+            delete("/{id}", ticketController::delete);
+            post("/populate", ctx -> ticketController.populateDB(emf));
         };
     }
 

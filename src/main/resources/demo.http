@@ -1,4 +1,4 @@
-GET localhost:7070/api/routes
+POST localhost:7070/api/ticket/populate
 
 ###
 GET localhost:7070/api/hotel

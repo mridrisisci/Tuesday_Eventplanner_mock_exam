@@ -13,7 +13,7 @@ import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.appabind.ObjectMapper;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static io.restassured.RestAssured.given;
@@ -32,9 +32,9 @@ class HotelResourceTest
     @BeforeAll
     static void setUpAll()
     {
-        HotelController hotelController = new HotelController(emf);
+        TicketController ticketController = new TicketController(emf);
         SecurityController securityController = new SecurityController(emf);
-        Routes routes = new Routes(hotelController, securityController);
+        Routes routes = new Routes(ticketController, securityController);
         ApplicationConfig
                 .getInstance()
                 .initiateServer()
@@ -55,8 +55,8 @@ class HotelResourceTest
             t1 = new Hotel("TestEntityA");
             t2 = new Hotel("TestEntityB");
             em.getTransaction().begin();
-            em.createQuery("DELETE FROM Room ").executeUpappe();
-            em.createQuery("DELETE FROM Hotel ").executeUpappe();
+            //em.createQuery("DELETE FROM Room ").executeUpappe();
+            //em.createQuery("DELETE FROM Hotel ").executeUpappe();
 
             em.persist(t1);
             em.persist(t2);

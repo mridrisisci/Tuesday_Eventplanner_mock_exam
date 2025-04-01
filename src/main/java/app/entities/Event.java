@@ -40,4 +40,16 @@ public class Event
         this.category = eventDTO.getCategory();
     }
 
+    public void addTicket(Ticket ticket)
+    {
+        tickets.add(ticket);
+        ticket.setEvent(this);
+    }
+
+    public void deleteTicket(Ticket ticket)
+    {
+        tickets.remove(ticket);
+        ticket.setEvent(null);
+    }
+
 }
