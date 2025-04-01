@@ -2,7 +2,7 @@ package app;
 
 import app.config.ApplicationConfig;
 import app.config.HibernateConfig;
-import app.controllers.HotelController;
+import app.controllers.EventController;
 import app.controllers.SecurityController;
 import app.controllers.TicketController;
 import app.routes.Routes;
@@ -18,7 +18,8 @@ public class Main
     {
         TicketController ticketController = new TicketController(emf);
         SecurityController securityController = new SecurityController(emf);
-        Routes routes = new Routes(ticketController, securityController);
+        EventController eventController = new EventController(emf);
+        Routes routes = new Routes(ticketController, securityController, eventController);
 
         ApplicationConfig
                 .getInstance()

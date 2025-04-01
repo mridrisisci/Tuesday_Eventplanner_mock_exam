@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketDTO
+public class EventDTO
 {
     private Integer id;
     private LocalDate purchaseDate;

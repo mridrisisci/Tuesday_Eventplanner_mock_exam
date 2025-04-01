@@ -45,4 +45,9 @@ import java.time.LocalDate;
         this.seatNumber = ticketDTO.getSeatNumber();
     }
 
+    public Ticket(Integer id)
+    {
+        this.id = id;
+    }
+
 }

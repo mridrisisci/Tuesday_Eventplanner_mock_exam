@@ -1,35 +1,72 @@
 package app.controllers;
 
 import app.dao.CrudDAO;
-import app.dao.HotelDAO;
+import app.dao.GenericDAO;
 import app.dto.ErrorMessage;
-import app.dto.HotelDTO;
-import app.entities.Hotel;
-import app.entities.Room;
+import app.dto.EventDTO;
+import app.dto.TicketDTO;
+import app.entities.Event;
+import app.entities.Ticket;
+import app.utils.Populator;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class HotelController implements IController
+
+public class EventController implements IController
 {
     private final CrudDAO dao;
-    private static final Logger logger = LoggerFactory.getLogger(HotelController.class);
+    private static final Logger logger = LoggerFactory.getLogger(EventController.class);
 
 
-    public HotelController(EntityManagerFactory emf)
+    public EventController(EntityManagerFactory emf)
     {
-        dao = new HotelDAO(emf);
+        dao = new GenericDAO(emf);
     }
 
-    public HotelController(CrudDAO dao)
+    public EventController(CrudDAO dao)
     {
         this.dao = dao;
     }
 
+    public void populateDB(EntityManagerFactory emf)
+    {
+        Populator populator = new Populator();
+        try (EntityManager em = emf.createEntityManager())
+        {
+            populator.resetAndPersistEntities(em);
+            logger.info("Populated database with dummy data");
+        } catch (Exception e)
+        {
+            logger.error("Error populating database: " + e.getMessage());
+        }
+
+    }
+
+    public void searchEventByCategory(Context ctx)
+    {
+        try
+        {
+            String param = ctx.pathParam("category");
+            List<Event> events = dao.getAll(Event.class);
+            List<Event> filteredEvents = events.stream()
+                .filter(event -> event.getCategory().equals(param))
+                .collect(Collectors.toList());
+            ctx.json(filteredEvents);
+        } catch (Exception e)
+        {
+            logger.error("error fetching events", e);
+            ErrorMessage err = new ErrorMessage("Could not fetch events from DB.");
+            ctx.status(404).json(err);
+        }
+    }
 
 
     @Override
@@ -37,7 +74,7 @@ public class HotelController implements IController
     {
         try
         {
-            ctx.json(dao.getAll(Hotel.class));
+            ctx.json(dao.getAll(Ticket.class));
         }
         catch (Exception ex)
         {
@@ -56,7 +93,7 @@ public class HotelController implements IController
             long id = ctx.pathParamAsClass("id", Long.class)
                     .check(i -> i>0, "id must be at least 0")
                     .getOrThrow((valiappor) -> new BadRequestResponse("Invalid id"));
-            HotelDTO foundEntity = new HotelDTO(dao.getById(Hotel.class, id));
+            TicketDTO foundEntity = new TicketDTO(dao.getById(Ticket.class, id));
             ctx.json(foundEntity);
 
         } catch (Exception ex){
@@ -71,15 +108,15 @@ public class HotelController implements IController
     {
         try
         {
-            HotelDTO incomingTest = ctx.bodyAsClass(HotelDTO.class);
-            Hotel entity = new Hotel(incomingTest);
-            Hotel createdEntity = dao.create(entity);
-            for (Room room : entity.getRooms())
+            EventDTO incomingTest = ctx.bodyAsClass(EventDTO.class);
+            Event entity = new Event(incomingTest);
+            Event createdEntity = dao.create(entity);
+            /*for (Room room : entity.getRooms())
             {
                 room.setHotel(createdEntity);
-                dao.update(room);
-            }
-            ctx.json(new HotelDTO(createdEntity));
+                dao.upappe(room);
+            }*/
+            ctx.json(new EventDTO(createdEntity));
         }
         catch (Exception ex)
         {
@@ -97,18 +134,18 @@ public class HotelController implements IController
             long id = ctx.pathParamAsClass("id", Long.class)
                     .check(i -> i>0, "id must be at least 0")
                     .getOrThrow((valiappor) -> new BadRequestResponse("Invalid id"));
-            HotelDTO incomingEntity = ctx.bodyAsClass(HotelDTO.class);
-            Hotel hotelToUpappe = dao.getById(Hotel.class, id);
-            if (incomingEntity.getName() != null)
+            TicketDTO incomingEntity = ctx.bodyAsClass(TicketDTO.class);
+            Ticket ticketToUpdate = dao.getById(Ticket.class, id);
+            if (incomingEntity.getPurchaseDate() != null)
             {
-                hotelToUpappe.setName(incomingEntity.getName());
+                ticketToUpdate.setPurchseDate(incomingEntity.getPurchaseDate());
             }
-            if (incomingEntity.getAddress() != null)
+            if (incomingEntity.getPrice() != null)
             {
-                hotelToUpappe.setAddress(incomingEntity.getAddress());
+                ticketToUpdate.setPrice(incomingEntity.getPrice());
             }
-            Hotel upappedEntity = dao.update(hotelToUpappe);
-            HotelDTO returnedEntity = new HotelDTO(upappedEntity);
+            Ticket updatedTicket = dao.update(ticketToUpdate);
+            TicketDTO returnedEntity = new TicketDTO(updatedTicket);
             ctx.json(returnedEntity);
         }
         catch (Exception ex)
@@ -127,7 +164,7 @@ public class HotelController implements IController
             long id = ctx.pathParamAsClass("id", Long.class)
                     .check(i -> i>0, "id must be at least 0")
                     .getOrThrow((valiappor) -> new BadRequestResponse("Invalid id"));
-            dao.delete(Hotel.class, id);
+            dao.delete(Ticket.class, id);
             ctx.status(204);
         }
         catch (Exception ex)
@@ -145,8 +182,8 @@ public class HotelController implements IController
             long id = context.pathParamAsClass("id", Long.class)
                     .check(i -> i>0, "id must be at least 0")
                     .getOrThrow((valiappor) -> new BadRequestResponse("Invalid id"));
-            Hotel hotel = dao.getById(Hotel.class, id);
-            context.json(hotel.getRooms());
+            Event event = dao.getById(Event.class, id);
+            context.json(event.getTickets());
         }
         catch (Exception ex)
         {

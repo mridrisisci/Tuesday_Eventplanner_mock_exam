@@ -34,10 +34,15 @@ public class Event
 
     public Event(EventDTO eventDTO)
     {
-        this.name = eventDTO.getName();
+        this.name = eventDTO.get;
         this.location = eventDTO.getLocation();
         this.price = eventDTO.getPrice();
         this.category = eventDTO.getCategory();
+    }
+
+    public Event(String name)
+    {
+        this.name = name;
     }
 
     public void addTicket(Ticket ticket)

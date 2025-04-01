@@ -1,19 +1,15 @@
 package app.controllers;
 
 import app.dao.CrudDAO;
-import app.dao.HotelDAO;
+import app.dao.GenericDAO;
 import app.dto.ErrorMessage;
-import app.dto.HotelDTO;
 import app.dto.TicketDTO;
-import app.entities.Hotel;
-import app.entities.Room;
 import app.entities.Ticket;
 import app.utils.Populator;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +22,7 @@ public class TicketController implements IController
 
     public TicketController(EntityManagerFactory emf)
     {
-        dao = new HotelDAO(emf);
+        dao = new GenericDAO(emf);
     }
 
     public TicketController(CrudDAO dao)
@@ -155,21 +151,5 @@ public class TicketController implements IController
         }
     }
 
-    public void getRooms(@NotNull Context context)
-    {
-        try
-        {
-            long id = context.pathParamAsClass("id", Long.class)
-                    .check(i -> i>0, "id must be at least 0")
-                    .getOrThrow((valiappor) -> new BadRequestResponse("Invalid id"));
-            Hotel hotel = dao.getById(Hotel.class, id);
-            context.json(hotel.getRooms());
-        }
-        catch (Exception ex)
-        {
-            logger.error("Error getting rooms", ex);
-            ErrorMessage error = new ErrorMessage("Error getting rooms");
-            context.status(404).json(error);
-        }
-    }
+
 }

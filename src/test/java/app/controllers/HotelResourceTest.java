@@ -2,9 +2,9 @@ package app.controllers;
 
 import app.config.ApplicationConfig;
 import app.config.HibernateConfig;
-import app.dto.HotelDTO;
-import app.entities.Hotel;
-import app.entities.Room;
+import app.dto.EventDTO;
+import app.entities.Event;
+import app.entities.Ticket;
 import app.routes.Routes;
 import io.restassured.RestAssured;
 import jakarta.persistence.EntityManager;
@@ -25,7 +25,7 @@ class HotelResourceTest
 
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
     final ObjectMapper objectMapper = new ObjectMapper();
-    Hotel t1, t2;
+    Event event1, event2;
     final Logger logger = LoggerFactory.getLogger(HotelResourceTest.class.getName());
 
 
@@ -34,7 +34,8 @@ class HotelResourceTest
     {
         TicketController ticketController = new TicketController(emf);
         SecurityController securityController = new SecurityController(emf);
-        Routes routes = new Routes(ticketController, securityController);
+        EventController eventController = new EventController(emf);
+        Routes routes = new Routes(ticketController, securityController, eventController);
         ApplicationConfig
                 .getInstance()
                 .initiateServer()
@@ -52,14 +53,14 @@ class HotelResourceTest
         try (EntityManager em = emf.createEntityManager())
         {
             //TestEntity[] entities = EntityPopulator.populate(genericDAO);
-            t1 = new Hotel("TestEntityA");
-            t2 = new Hotel("TestEntityB");
+            event1 = new Event("TestEntityA");
+            event2 = new Event("TestEntityB");
             em.getTransaction().begin();
-            //em.createQuery("DELETE FROM Room ").executeUpappe();
-            //em.createQuery("DELETE FROM Hotel ").executeUpappe();
+            em.createQuery("DELETE FROM Event ").executeUpdate();
+            em.createQuery("DELETE FROM Ticket ").executeUpdate();
 
-            em.persist(t1);
-            em.persist(t2);
+            em.persist(event1);
+            em.persist(event2);
             em.getTransaction().commit();
         }
         catch (Exception e)
@@ -77,32 +78,31 @@ class HotelResourceTest
     @Test
     void getById()
     {
-        given().when().get("/hotel/" + t2.getId()).then().statusCode(200).body("id", equalTo(t2.getId().intValue()));
+        given().when().get("/hotel/" + event2.getId()).then().statusCode(200).body("id", equalTo(event2.getId().intValue()));
     }
 
     @Test
     void create()
     {
-        Hotel entity = new Hotel("Thor Partner Hotel", "Carl Gustavs Gade 1");
-        Room room = new Room("201");
-        entity.addRoom(room);
+        Event entity = new Event("Bronze Test 1337");
+        Ticket ticket = new Ticket(1);
+        entity.addTicket(ticket);
         try
         {
-            String json = objectMapper.writeValueAsString(new HotelDTO(entity));
+            String json = objectMapper.writeValueAsString(new EventDTO(entity));
             given().when()
                     .contentType("application/json")
                     .accept("application/json")
                     .body(json)
-                    .post("/hotel")
+                    .post("/event")
                     .then()
                     .statusCode(200)
                     .body("name", equalTo(entity.getName()))
-                    .body("address", equalTo(entity.getAddress()));
+                    //.body("address", equalTo(entity.getAddress()));
                     //.body("rooms.size()", equalTo(1));
         } catch (JsonProcessingException e)
         {
-            logger.error("Error creating hotel", e);
-
+            logger.error("Error creating event", e);
             fail();
         }
     }

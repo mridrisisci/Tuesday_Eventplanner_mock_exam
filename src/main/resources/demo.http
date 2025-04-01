@@ -34,5 +34,7 @@ Content-Type: "application/json"
 ###
 DELETE localhost:7070/api/ticket/1
 
+// EVENT ROUTES
+
 ###
-GET localhost:7070/api/hotel/1/rooms
+GET localhost:7070/api/event/search/conference

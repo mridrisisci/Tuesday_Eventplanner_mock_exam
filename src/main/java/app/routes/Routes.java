@@ -1,6 +1,7 @@
 package app.routes;
 
 import app.config.HibernateConfig;
+import app.controllers.EventController;
 import app.controllers.TicketController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import app.controllers.SecurityController;
@@ -13,22 +14,33 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 public class Routes
 {
     private final TicketController ticketController;
+    private final EventController eventController;
     private final SecurityController securityController;
     private final ObjectMapper jsonMapper = new ObjectMapper();
     private final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
-    public Routes(TicketController ticketController, SecurityController securityController)
+    public Routes(TicketController ticketController, SecurityController securityController, EventController eventController)
     {
         this.ticketController = ticketController;
         this.securityController = securityController;
+        this.eventController = eventController;
     }
 
     public EndpointGroup getRoutes()
     {
         return () -> {
             path("ticket", ticketRoutes());
+            path("event", eventRoutes());
             path("auth", authRoutes());
             path("protected", protectedRoutes());
+        };
+    }
+
+    private  EndpointGroup eventRoutes()
+    {
+        return () -> {
+            post("/create", EventController::create);
+            get("/search/{category}", (ctx) -> eventController.searchEventByCategory(ctx));
         };
     }
 
