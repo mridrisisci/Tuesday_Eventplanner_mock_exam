@@ -82,12 +82,12 @@
         <!-- Jackson for JSON handling -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-appabind</artifactId>
+            <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version> <!-- or the latest version -->
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.appatype</groupId>
-            <artifactId>jackson-appatype-jsr310</artifactId>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson.version}</version> <!-- or the latest version -->
         </dependency>
 

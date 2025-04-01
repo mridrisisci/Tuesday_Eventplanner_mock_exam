@@ -41,10 +41,10 @@ public class HibernateConfig
 
     // TODO: IMPORTANT: Add Entity classes here for them to be registered with Hibernate
     private static void getAnnotationConfiguration(Configuration configuration) {
-        configuration.addAnnotatedClass(Hotel.class);
-        configuration.addAnnotatedClass(Room.class);
-        configuration.addAnnotatedClass(UserAccount.class);
-        configuration.addAnnotatedClass(Roles.class);
+        configuration.addAnnotatedClass(Ticket.class);
+        configuration.addAnnotatedClass(Event.class);
+        configuration.addAnnotatedClass(User.class);
+        //configuration.addAnnotatedClass(Roles.class);
     }
 
     private static EntityManagerFactory createEMF(boolean forTest) {

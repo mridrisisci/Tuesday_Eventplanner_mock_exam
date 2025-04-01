@@ -3,7 +3,7 @@ package app.dao;
 import app.entities.UserAccount;
 import app.enums.Roles;
 import app.exceptions.DaoException;
-import app.exceptions.ValiappionException;
+import app.exceptions.ValidationException;
 import dk.bugelhartmann.UserDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManagerFactory;
@@ -22,14 +22,14 @@ public class SecurityDAO extends GenericDAO implements ISecurityDAO
     }
 
     @Override
-    public UserDTO getVerifiedUser(String username, String password) throws ValiappionException, DaoException
+    public UserDTO getVerifiedUser(String username, String password) throws ValidationException, DaoException
     {
 
         UserAccount userAccount = super.getById(UserAccount.class, username); //Throws DaoException if user not found
         if (!userAccount.verifyPassword(password))
         {
             logger.error("{} {}", userAccount.getUsername(), userAccount.getPassword());
-            throw new ValiappionException("Password does not match");
+            throw new ValidationException("Password does not match");
         }
         return new UserDTO(userAccount.getUsername(), userAccount.getRoles()
                                                     .stream()

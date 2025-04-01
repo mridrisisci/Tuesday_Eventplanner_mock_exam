@@ -14,6 +14,7 @@ public class EventDTO
     private String name;
     private String location;
     private Integer price;
+    private String category;
 
     public EventDTO(Event event)
     {
@@ -21,6 +22,7 @@ public class EventDTO
         this.name = event.getName();
         this.location = event.getLocation();
         this.price = event.getPrice();
+        this.category = event.getCategory();
     }
 
 }

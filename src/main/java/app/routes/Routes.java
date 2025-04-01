@@ -1,6 +1,6 @@
 package app.routes;
 
-import com.fasterxml.jackson.appabind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import app.controllers.HotelController;
 import app.controllers.SecurityController;
 import app.enums.Roles;

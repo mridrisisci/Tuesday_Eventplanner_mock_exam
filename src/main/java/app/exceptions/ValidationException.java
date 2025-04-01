@@ -3,13 +3,13 @@ package app.exceptions;
 /**
  * Exception thrown when valiappion fails
  */
-public class ValiappionException extends Exception {
+public class ValidationException extends Exception {
     
     /**
      * Constructs a new ValiappionException with the specified detail message.
      * @param message the detail message
      */
-    public ValiappionException(String message) {
+    public ValidationException(String message) {
         super(message);
     }
     
@@ -18,7 +18,7 @@ public class ValiappionException extends Exception {
      * @param message the detail message
      * @param cause the cause
      */
-    public ValiappionException(String message, Throwable cause) {
+    public ValidationException(String message, Throwable cause) {
         super(message, cause);
     }
 }

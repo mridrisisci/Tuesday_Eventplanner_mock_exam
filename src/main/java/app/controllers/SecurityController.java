@@ -1,7 +1,7 @@
 package app.controllers;
 
-import com.fasterxml.jackson.appabind.ObjectMapper;
-import com.fasterxml.jackson.appabind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import app.config.HibernateConfig;
 import app.dao.ISecurityDAO;
 import app.dao.SecurityDAO;
@@ -10,7 +10,7 @@ import app.entities.UserAccount;
 import app.enums.Roles;
 import app.exceptions.ApiException;
 import app.exceptions.DaoException;
-import app.exceptions.ValiappionException;
+import app.exceptions.ValidationException;
 import app.utils.PropertyReader;
 import dk.bugelhartmann.*;
 import io.javalin.http.*;
@@ -71,7 +71,7 @@ public class SecurityController implements ISecurityController
 
             ctx.status(HttpStatus.OK).json(returnJson);
         }
-        catch (EntityNotFoundException | ValiappionException | DaoException e) {
+        catch (EntityNotFoundException | ValidationException | DaoException e) {
             logger.error("Error logging in user", e);
             throw new ApiException(401, "Could not verify user", e);
             //ctx.status(HttpStatus.UNAUTHORIZED).json(new ErrorMessage("Could not verify user " + e.getMessage()));

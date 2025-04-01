@@ -1,7 +1,7 @@
 package app.utils;
 
 
-import com.fasterxml.jackson.appabind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import app.exceptions.ApiException;
 
 import java.net.URI;

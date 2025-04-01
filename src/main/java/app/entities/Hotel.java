@@ -1,6 +1,5 @@
 package app.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import app.dto.HotelDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,7 +22,7 @@ public class Hotel
     private String name;
     private String address;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "hotel", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    @JsonBackReference
+    //@JsonBackReference
     @ToString.Exclude
     private List<Room> rooms = new ArrayList<>();
 

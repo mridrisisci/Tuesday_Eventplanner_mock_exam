@@ -4,7 +4,7 @@ import app.config.HibernateConfig;
 import app.entities.UserAccount;
 import app.enums.Roles;
 import app.exceptions.DaoException;
-import app.exceptions.ValiappionException;
+import app.exceptions.ValidationException;
 import dk.bugelhartmann.UserDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
@@ -37,7 +37,8 @@ class SecurityDAOTest {
 
 
     @Test
-    void testGetVerifiedUser_Success() throws ValiappionException {
+    void testGetVerifiedUser_Success() throws ValidationException
+    {
         // Arrange
         String username = "testuser";
         String password = "password123";
@@ -59,7 +60,7 @@ class SecurityDAOTest {
         String wrongPassword = "wrongpassword";
 
         // Act & Assert
-        ValiappionException exception = assertThrows(ValiappionException.class,
+        ValidationException exception = assertThrows(ValidationException.class,
                                                         () -> securityDAO.getVerifiedUser(username, wrongPassword));
 
         assertEquals("Password does not match", exception.getMessage());
