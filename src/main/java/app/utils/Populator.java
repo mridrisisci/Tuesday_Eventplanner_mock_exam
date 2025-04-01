@@ -149,7 +149,11 @@ public class Populator
         em.getTransaction().begin();
         em.createQuery("DELETE FROM Ticket").executeUpdate();
         em.createQuery("DELETE FROM Event").executeUpdate();
-        em.createQuery("DELETE FROM User").executeUpdate();
+        //em.createQuery("DELETE FROM User").executeUpdate();
+        for (Event entity : getEvents().values())
+        {
+            em.persist(entity);
+        }
         for (Ticket entity : getTickets().values())
         {
             em.persist(entity);
@@ -162,10 +166,7 @@ public class Populator
         event2.addTicket(ticket4);
         event2.addTicket(ticket5);
         event2.addTicket(ticket6);
-        for (Event entity : getEvents().values())
-        {
-            em.persist(entity);
-        }
+
 
         // ensures bi-directional mapping is updated to DB
         event1 = em.merge(event1);

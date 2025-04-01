@@ -4,8 +4,10 @@ import app.dao.CrudDAO;
 import app.dao.HotelDAO;
 import app.dto.ErrorMessage;
 import app.dto.HotelDTO;
+import app.dto.TicketDTO;
 import app.entities.Hotel;
 import app.entities.Room;
+import app.entities.Ticket;
 import app.utils.Populator;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
@@ -52,7 +54,7 @@ public class TicketController implements IController
     {
         try
         {
-            ctx.json(dao.getAll(Hotel.class));
+            ctx.json(dao.getAll(Ticket.class));
         }
         catch (Exception ex)
         {
@@ -71,7 +73,7 @@ public class TicketController implements IController
             long id = ctx.pathParamAsClass("id", Long.class)
                     .check(i -> i>0, "id must be at least 0")
                     .getOrThrow((valiappor) -> new BadRequestResponse("Invalid id"));
-            HotelDTO foundEntity = new HotelDTO(dao.getById(Hotel.class, id));
+            TicketDTO foundEntity = new TicketDTO(dao.getById(Ticket.class, id));
             ctx.json(foundEntity);
 
         } catch (Exception ex){
@@ -86,15 +88,15 @@ public class TicketController implements IController
     {
         try
         {
-            HotelDTO incomingTest = ctx.bodyAsClass(HotelDTO.class);
-            Hotel entity = new Hotel(incomingTest);
-            Hotel createdEntity = dao.create(entity);
-            for (Room room : entity.getRooms())
+            TicketDTO incomingTest = ctx.bodyAsClass(TicketDTO.class);
+            Ticket entity = new Ticket(incomingTest);
+            Ticket createdEntity = dao.create(entity);
+            /*for (Room room : entity.getRooms())
             {
                 room.setHotel(createdEntity);
                 dao.upappe(room);
-            }
-            ctx.json(new HotelDTO(createdEntity));
+            }*/
+            ctx.json(new TicketDTO(createdEntity));
         }
         catch (Exception ex)
         {
@@ -112,18 +114,18 @@ public class TicketController implements IController
             long id = ctx.pathParamAsClass("id", Long.class)
                     .check(i -> i>0, "id must be at least 0")
                     .getOrThrow((valiappor) -> new BadRequestResponse("Invalid id"));
-            HotelDTO incomingEntity = ctx.bodyAsClass(HotelDTO.class);
-            Hotel hotelToUpappe = dao.getById(Hotel.class, id);
-            if (incomingEntity.getName() != null)
+            TicketDTO incomingEntity = ctx.bodyAsClass(TicketDTO.class);
+            Ticket ticketToUpdate = dao.getById(Ticket.class, id);
+            if (incomingEntity.getPurchaseDate() != null)
             {
-                hotelToUpappe.setName(incomingEntity.getName());
+                ticketToUpdate.setPurchseDate(incomingEntity.getPurchaseDate());
             }
-            if (incomingEntity.getAddress() != null)
+            if (incomingEntity.getPrice() != null)
             {
-                hotelToUpappe.setAddress(incomingEntity.getAddress());
+                ticketToUpdate.setPrice(incomingEntity.getPrice());
             }
-            Hotel upappedEntity = dao.upappe(hotelToUpappe);
-            HotelDTO returnedEntity = new HotelDTO(upappedEntity);
+            Ticket updatedTicket = dao.update(ticketToUpdate);
+            TicketDTO returnedEntity = new TicketDTO(updatedTicket);
             ctx.json(returnedEntity);
         }
         catch (Exception ex)
@@ -142,7 +144,7 @@ public class TicketController implements IController
             long id = ctx.pathParamAsClass("id", Long.class)
                     .check(i -> i>0, "id must be at least 0")
                     .getOrThrow((valiappor) -> new BadRequestResponse("Invalid id"));
-            dao.delete(Hotel.class, id);
+            dao.delete(Ticket.class, id);
             ctx.status(204);
         }
         catch (Exception ex)

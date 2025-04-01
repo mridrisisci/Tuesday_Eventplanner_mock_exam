@@ -1,37 +1,38 @@
 POST localhost:7070/api/ticket/populate
 
 ###
-GET localhost:7070/api/hotel
+
+// TICKET ROUTES
+
+GET localhost:7070/api/ticket/all
+###
+
+GET localhost:7070/api/ticket/5
 
 ###
-GET localhost:7070/api/hotel/3
-
-###
-POST localhost:7070/api/hotel
+POST localhost:7070/api/ticket/create
 Content-Type: "application/json"
 
 {
-    "name": "Park Hotel",
-    "address": "Brorsonsvej 2",
-    "rooms":[
-        {
-            "roomNumber": 101,
-            "price": 1000
-        }
-    ]
+  "id": 7,
+  "purchaseDate": "2025-04-01",
+  "price": 99.99,
+  "seatNumber": 12
 }
 
 ###
-PUT localhost:7070/api/hotel/1
+PUT localhost:7070/api/ticket/1
 Content-Type: "application/json"
 
 {
-    "name": "Lucky Star Hotel",
-    "address": "Brorsonsvej 1"
+  "id": 2,
+  "purchaseDate": "2028-04-01",
+  "price": 1,
+  "seatNumber": 1337
 }
 
 ###
-DELETE localhost:7070/api/hotel/1
+DELETE localhost:7070/api/ticket/1
 
 ###
 GET localhost:7070/api/hotel/1/rooms

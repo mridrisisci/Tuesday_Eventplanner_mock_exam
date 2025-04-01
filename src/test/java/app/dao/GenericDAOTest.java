@@ -158,7 +158,7 @@ class GenericDAOTest
         h1.setName("UpappedName");
 
         // Act
-        Hotel result = genericDAO.upappe(h1);
+        Hotel result = genericDAO.update(h1);
 
         // Assert
         assertThat(result, samePropertyValuesAs(h1, "rooms"));
@@ -175,7 +175,7 @@ class GenericDAOTest
         List<Hotel> testEntities = List.of(h1, h2);
 
         // Act
-        List<Hotel> result = genericDAO.upappe(testEntities);
+        List<Hotel> result = genericDAO.update(testEntities);
 
         // Assert
         assertNotNull(result);

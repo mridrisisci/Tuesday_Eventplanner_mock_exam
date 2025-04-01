@@ -2,7 +2,6 @@ package app.entities;
 
 import app.dto.TicketDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,8 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ticket")
-public class Ticket
+@Table(name = "ticket") public class Ticket
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
